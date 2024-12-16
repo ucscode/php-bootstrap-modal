@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Ucscode\\BsComponent\\Dialog": "src/"
+            "Ucscode\\BsComponent\\Modal": "src/"
         }
     },
     "require-dev": {
