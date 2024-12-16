@@ -1,0 +1,28 @@
+{
+    "name": "ucscode/bs-modal-dialog",
+    "description": "A ",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Uchenna Ajah",
+            "email": "uche23mail@gmail.com",
+            "homepage": "https://github.com/ucscode"
+        },
+        {
+            "name": "Elizabeth Ogbu",
+            "email": "lizzyobg1@gmail.com",
+            "homepage": "https://github.com/codelsie"
+        }
+    ],
+    "require": {
+        "php": ">=8.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ucscode\\BsModalDialog\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11"
+    }
+}
