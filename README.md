@@ -9,7 +9,7 @@ A lightweight PHP library to generate dynamic Bootstrap modals effortlessly. Cus
 - Lightweight and easy to integrate.
 
 ## Requirements
-- PHP 8.3 or higher.
+- PHP 8.2 or higher.
 - Bootstrap 5 CSS and JavaScript files loaded in your project.
 
 ## Installation
@@ -77,15 +77,25 @@ The bootstrap modal element is built using [UssElement](https://github.com/ucsco
 
 
 ```php
-$modal->getElement()->querySelector('.modal-header')->getClassList()->add('custom-header-class');
+$modal->getElement()
+    ->querySelector('.modal-header')
+        ->getClassList()
+            ->add('custom-header-class')
+;
 ```
 
 ```php
-$modal->getElement()->querySelector('.modal-body')->setAttribute('id', 'custom-body-id');
+$modal->getElement()
+    ->querySelector('.modal-body')
+        ->setAttribute('id', 'custom-body-id')
+;
 ```
 
 ```php
-$modal->getElement()->querySelector('.modal-footer')->setVisible(false);
+$modal->getElement()
+    ->querySelector('.modal-footer')
+        ->setVisible(false)
+;
 ```
 
 ### 3. Rendering the Modal
