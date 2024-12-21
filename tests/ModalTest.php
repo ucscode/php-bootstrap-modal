@@ -2,6 +2,7 @@
 
 namespace Ucscode\HtmlComponent\BsModal\Test;
 
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
 use Ucscode\UssElement\Node\ElementNode;
 use Ucscode\HtmlComponent\BsModal\BsModal;
@@ -24,6 +25,8 @@ class ModalTest extends TestCase
         $this->assertSame('A', $button->getElement()->getNodeName());
     }
 
+        #[Depends('testBsModalButtonInstance')]
+        
     public function testBsModalInstance(BsModalButton $button): void
     {
         $modal = new BsModal([
