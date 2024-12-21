@@ -13,11 +13,11 @@ class BsModalBuilder
     protected ElementInterface $content;
     protected ElementInterface $header;
     protected ElementInterface $title;
-    protected ElementInterface $close;
+    protected ElementInterface $btnClose;
     protected ElementInterface $body;
     protected ElementInterface $footer;
-    protected ElementInterface $secondary;
-    protected ElementInterface $primary;
+    protected ElementInterface $btnSecondary;
+    protected ElementInterface $btnPrimary;
 
     public function __construct()
     {
@@ -50,9 +50,9 @@ class BsModalBuilder
         return $this->title;
     }
 
-    public function getCloseElement(): ElementInterface
+    public function getBtnCloseElement(): ElementInterface
     {
-        return $this->close;
+        return $this->btnClose;
     }
 
     public function getBodyElement(): ElementInterface
@@ -65,14 +65,14 @@ class BsModalBuilder
         return $this->footer;
     }
 
-    public function getSecondaryElement(): ElementInterface
+    public function getBtnSecondaryElement(): ElementInterface
     {
-        return $this->secondary;
+        return $this->btnSecondary;
     }
 
-    public function getPrimaryElement(): ElementInterface
+    public function getBtnPrimaryElement(): ElementInterface
     {
-        return $this->primary;
+        return $this->btnPrimary;
     }
 
     protected function createElements(): void
@@ -98,7 +98,7 @@ class BsModalBuilder
            'class' => 'modal-title'
         ]);
 
-        $this->close = new ElementNode(NodeNameEnum::NODE_DIV, [
+        $this->btnClose = new ElementNode(NodeNameEnum::NODE_DIV, [
            'class' => 'btn-close'
         ]);
 
@@ -110,11 +110,11 @@ class BsModalBuilder
            'class' => 'modal-footer'
         ]);
 
-        $this->secondary = new ElementNode(NodeNameEnum::NODE_DIV, [
+        $this->btnSecondary = new ElementNode(NodeNameEnum::NODE_DIV, [
            'class' => 'btn-secondary'
         ]);
 
-        $this->primary = new ElementNode(NodeNameEnum::NODE_DIV, [
+        $this->btnPrimary = new ElementNode(NodeNameEnum::NODE_DIV, [
            'class' => 'btn-primary'
         ]);
     }
@@ -125,10 +125,10 @@ class BsModalBuilder
         $this->dialog->appendChild($this->content);
         $this->content->appendChild($this->header);
         $this->header->appendChild($this->title);
-        $this->header->appendChild($this->close);
+        $this->header->appendChild($this->btnClose);
         $this->content->appendChild($this->body);
         $this->content->appendChild($this->footer);
-        $this->footer->appendChild($this->secondary);
-        $this->footer->appendChild($this->primary);
+        $this->footer->appendChild($this->btnSecondary);
+        $this->footer->appendChild($this->btnPrimary);
     }
 }

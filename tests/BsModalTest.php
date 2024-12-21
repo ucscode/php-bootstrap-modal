@@ -9,7 +9,7 @@ use Ucscode\HtmlComponent\BsModal\BsModal;
 use Ucscode\HtmlComponent\BsModal\BsModalButton;
 use Ucscode\UssElement\Collection\HtmlCollection;
 
-class ModalTest extends TestCase
+class BsModalTest extends TestCase
 {
     public function testBsModalButtonInstance(): BsModalButton
     {
@@ -28,7 +28,7 @@ class ModalTest extends TestCase
         return $button;
     }
 
-    #[Depends('testBsModalButtonInstance')]    
+    #[Depends('testBsModalButtonInstance')]
     public function testBsModalInstance(BsModalButton $button): void
     {
         $modal = new BsModal([
