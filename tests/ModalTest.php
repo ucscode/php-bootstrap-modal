@@ -18,15 +18,17 @@ class ModalTest extends TestCase
         ]);
 
         $this->assertSame('Click Me', $button->getLabel());
-        $this->assertSame('anchor', BsModalButton::TYPE_ANCHOR);
-        $this->assertSame('button', BsModalButton::TYPE_ANCHOR);
+        $this->assertSame('a', BsModalButton::TYPE_ANCHOR);
+        $this->assertSame('button', BsModalButton::TYPE_BUTTON);
         $this->assertSame(BsModalButton::TYPE_ANCHOR, $button->getType());
         $this->assertInstanceOf(ElementNode::class, $button->getElement());
         $this->assertSame('A', $button->getElement()->getNodeName());
+        $this->assertSame('btn btn-secondary', $button->getElement()->getNodeName());
+
+        return $button;
     }
 
-        #[Depends('testBsModalButtonInstance')]
-        
+    #[Depends('testBsModalButtonInstance')]    
     public function testBsModalInstance(BsModalButton $button): void
     {
         $modal = new BsModal([
@@ -41,12 +43,17 @@ class ModalTest extends TestCase
         ]);
 
         $newButton = new BsmodalButton();
-        $modal->addButton($newButton);
 
+        $modal->addButton($newButton);
+        $modal->addButton($newButton); // no duplicate button allowed
+
+        $this->assertTrue($modal->hasButton($newButton));
         $this->assertSame('A bootstrap modal', $modal->getTitle());
         $this->assertCount(3, $modal->getButtons());
         $this->assertSame($newButton, $modal->getButton(2));
-        $this->assertSame('Ok', $newButton->getTitle());
+        $this->assertSame($button, $modal->getButton(0));
+        $this->assertNull($modal->getButton(3));
+        $this->assertSame('Ok', $newButton->getLabel());
         $this->assertInstanceOf(ElementNode::class, $modal->getElement());
         $this->assertSame('modal', $modal->getElement()->getAttribute('class'));
 

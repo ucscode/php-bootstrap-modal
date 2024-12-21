@@ -1,6 +1,6 @@
 {
     "name": "ucscode/bs-modal-component",
-    "description": "A ",
+    "description": "A bootstrap modal box managed and rendered in php",
     "license": "MIT",
     "authors": [
         {
