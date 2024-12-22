@@ -94,12 +94,15 @@ class BsModalBuilder
            'class' => 'modal-header'
         ]);
 
-        $this->title = new ElementNode(NodeNameEnum::NODE_DIV, [
+        $this->title = new ElementNode(NodeNameEnum::NODE_H5, [
            'class' => 'modal-title'
         ]);
 
-        $this->btnClose = new ElementNode(NodeNameEnum::NODE_DIV, [
-           'class' => 'btn-close'
+        $this->btnClose = new ElementNode(NodeNameEnum::NODE_BUTTON, [
+           'class' => 'btn-close',
+           'type' => 'button',
+           'aria-label' => 'Close',
+            'data-bs-dismiss' => 'modal',
         ]);
 
         $this->body = new ElementNode(NodeNameEnum::NODE_DIV, [
@@ -110,12 +113,16 @@ class BsModalBuilder
            'class' => 'modal-footer'
         ]);
 
-        $this->btnSecondary = new ElementNode(NodeNameEnum::NODE_DIV, [
-           'class' => 'btn-secondary'
+        $this->btnSecondary = new ElementNode(NodeNameEnum::NODE_BUTTON, [
+           'class' => 'btn btn-secondary',
+           'type' => 'button',
+           'data-bs-dismiss' => 'modal',
+
         ]);
 
-        $this->btnPrimary = new ElementNode(NodeNameEnum::NODE_DIV, [
-           'class' => 'btn-primary'
+        $this->btnPrimary = new ElementNode(NodeNameEnum::NODE_BUTTON, [
+           'class' => 'btn btn-primary',
+           'type' => 'button'
         ]);
     }
 

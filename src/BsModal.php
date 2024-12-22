@@ -2,38 +2,31 @@
 
 namespace Ucscode\HtmlComponent\BsModal;
 
-use Closure;
+use Ucscode\HtmlComponent\BsModal\Builder\BsModalBuilder;
 use Ucscode\UssElement\Node\ElementNode;
 
 class BsModal
 {
-    protected ?string $id = null;
     protected ?string $title = null;
     protected ?string $message = null;
     protected ?string $size = null;
     protected bool $closeOnEscape = true;
     protected ?string $backdrop = 'static';
-    protected ?Closure $callback = null;
-    protected ?self $successor = null;
+    protected ?BsModal $successor = null;
     protected array $events = [];
     protected bool $show = true;
     protected bool $closeButton = true;
     protected bool $scrollable = false;
     protected bool $verticalCenter = false;
-    protected ?ElementNode $element = null;
+    protected ?string $callback = null;
     protected array $buttons = [];
+    protected BsModalBuilder $builder;
     protected ?ElementNode $associateButton = null;
 
-    public function getId(): ?string
+    public function __construct(array $configs = [])
     {
-        return $this->id;
-    }
-
-    public function setId(?string $id): static
-    {
-        $this->id = $id;
-
-        return $this;
+        $this->resolveConfiguration($configs);
+        $this->builder = new BsModalBuilder();
     }
 
     public function getTitle(): ?string
@@ -92,24 +85,28 @@ class BsModal
         return $this;
     }
 
-    public function getCallback(): ?Closure
+    public function getCallback(): ?string
     {
         return $this->callback;
     }
 
-    public function setCallback(?Closure $callback): static
+    public function setCallback(?string $callback): static
     {
         $this->callback = $callback;
         return $this;
     }
 
-    public function getSuccessor(): ?self
+    public function getSuccessor(): ?BsModal
     {
         return $this->successor;
     }
 
-    public function setSuccessor(?self $successor): static
+    public function setSuccessor(?BsModal $successor): static
     {
+        if ($successor === $this) {
+            throw new \InvalidArgumentException('The current modal cannot be a successor of itself');
+        }
+
         $this->successor = $successor;
         return $this;
     }
@@ -171,13 +168,7 @@ class BsModal
 
     public function getElement(): ElementNode
     {
-        return $this->element;
-    }
-
-    public function setElement(ElementNode $element): static
-    {
-        $this->element = $element;
-        return $this;
+        return $this->builder->getContainerElement();
     }
 
     public function getButtons(): array
@@ -191,6 +182,39 @@ class BsModal
         return $this;
     }
 
+    public function getButton(int $index): ?BsModalButton
+    {
+        return $this->buttons[$index] ?? null;
+    }
+
+    public function addButton(BsModalButton $button):static
+    {
+        if(!$this->hasButton($button)){
+            $this->buttons[] = $button;
+        }
+        return $this;
+    }
+
+    public function hasButton(BsModalButton $button): bool
+    {
+        return in_array($button, $this->buttons, true);
+    }
+
+    public function removeButton(BsModalButton|int $button): static
+    {
+        if ($button instanceof BsModalButton) {
+            $button = array_search($button, $this->buttons, true);
+        }
+
+        if ($button !== null && array_key_exists($button, $this->buttons)) {
+            unset($this->buttons[$button]);
+
+            $this->buttons = array_values($this->buttons);
+        }
+
+        return $this;
+    }
+
     public function getAssociateButton(): ElementNode
     {
         return $this->associateButton;
@@ -200,5 +224,19 @@ class BsModal
     {
         $this->associateButton = $associateButton;
         return $this;
+    }
+
+    private function resolveConfiguration(array $configs): void
+    {
+        $restrainedProperties = [
+            'element',
+            'associateButton'
+        ];
+
+        foreach ($configs as $key => $value) {
+            if (property_exists($this, $key) && !in_array($key, $restrainedProperties)) {
+                $this->{$key} = $value;
+            }
+        }
     }
 }

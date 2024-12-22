@@ -21,7 +21,7 @@ class BsModalBuilderTest extends TestCase
         $this->assertTrue($builder->getBtnCloseElement()->hasAttribute('data-bs-dismiss'), 'btnClose.data-bs-dismiss missing');
         $this->assertTrue($builder->getBtnCloseElement()->hasAttribute('aria-label'), 'btnClose.aria-label missing');
 
-        $this->assertTrue($builder->getBtnPrimaryElement()->hasAttribute('data-bs-dismiss'), 'btnPrimary.type missing');
+        $this->assertTrue($builder->getBtnSecondaryElement()->hasAttribute('data-bs-dismiss'), 'btnPrimary.data-bs-dismiss missing');
         $this->assertTrue($builder->getBtnPrimaryElement()->hasAttribute('type'), 'btnPrimary.type missing');
         $this->assertTrue($builder->getBtnSecondaryElement()->hasAttribute('type'), 'btnSecondary.type missing');
 

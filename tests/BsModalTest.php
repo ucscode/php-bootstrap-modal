@@ -18,12 +18,12 @@ class BsModalTest extends TestCase
         ]);
 
         $this->assertSame('Click Me', $button->getLabel());
-        $this->assertSame('a', BsModalButton::TYPE_ANCHOR);
-        $this->assertSame('button', BsModalButton::TYPE_BUTTON);
+        $this->assertSame('A', BsModalButton::TYPE_ANCHOR);
+        $this->assertSame('BUTTON', BsModalButton::TYPE_BUTTON);
         $this->assertSame(BsModalButton::TYPE_ANCHOR, $button->getType());
         $this->assertInstanceOf(ElementNode::class, $button->getElement());
         $this->assertSame('A', $button->getElement()->getNodeName());
-        $this->assertSame('btn btn-secondary', $button->getElement()->getNodeName());
+        $this->assertSame('btn btn-secondary', $button->getElement()->getAttribute('class'));
 
         return $button;
     }
