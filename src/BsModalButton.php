@@ -7,15 +7,15 @@ use Ucscode\UssElement\Node\ElementNode;
 
 class BsModalButton
 {
-    const TYPE_ANCHOR = 'A';
-    const TYPE_BUTTON = 'BUTTON';
+    public const TYPE_ANCHOR = 'A';
+    public const TYPE_BUTTON = 'BUTTON';
 
     protected ?string $label = null;
     protected ?string $type = null;
     protected ?ElementNode $element = null;
 
     public function __construct(string $label = 'Ok', string $type = self::TYPE_BUTTON, array $attributes = [])
-    {   
+    {
         $this->label = $label;
         $this->type = $this->validateBtnType($type);
         $this->element = new ElementNode($this->type, $attributes);

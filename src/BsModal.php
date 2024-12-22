@@ -187,9 +187,9 @@ class BsModal
         return $this->buttons[$index] ?? null;
     }
 
-    public function addButton(BsModalButton $button):static
+    public function addButton(BsModalButton $button): static
     {
-        if(!$this->hasButton($button)){
+        if (!$this->hasButton($button)) {
             $this->buttons[] = $button;
         }
         return $this;
