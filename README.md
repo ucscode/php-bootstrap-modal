@@ -17,7 +17,7 @@ A lightweight PHP library to generate dynamic Bootstrap modals effortlessly. Cus
 Install via Composer:
 
 ```bash
-composer require ucscode/bs-modal-component
+composer require ucscode/php-bs-modal
 ```
 
 ## Usage
