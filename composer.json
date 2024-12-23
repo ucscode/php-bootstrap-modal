@@ -1,5 +1,5 @@
 {
-    "name": "ucscode/bs-modal-component",
+    "name": "ucscode/php-bs-modal",
     "description": "A bootstrap modal box managed and rendered in php",
     "license": "MIT",
     "authors": [
@@ -16,7 +16,8 @@
     ],
     "require": {
         "php": ">=8.2",
-        "ucscode/uss-element": "^3.0"
+        "ucscode/uss-element": "^3.0",
+        "symfony/property-access": "^7.2"
     },
     "autoload": {
         "psr-4": {

@@ -2,12 +2,15 @@
 
 namespace Ucscode\HtmlComponent\BsModal\Builder;
 
+use Ucscode\HtmlComponent\BsModal\BsModalButton;
 use Ucscode\UssElement\Contracts\ElementInterface;
 use Ucscode\UssElement\Node\ElementNode;
 use Ucscode\UssElement\Enums\NodeNameEnum;
+use Ucscode\UssElement\Node\TextNode;
 
 class BsModalBuilder
 {
+    protected string $modalId;
     protected ElementInterface $container;
     protected ElementInterface $dialog;
     protected ElementInterface $content;
@@ -16,13 +19,16 @@ class BsModalBuilder
     protected ElementInterface $btnClose;
     protected ElementInterface $body;
     protected ElementInterface $footer;
-    protected ElementInterface $btnSecondary;
-    protected ElementInterface $btnPrimary;
 
     public function __construct()
     {
         $this->createElements();
         $this->stackElements();
+    }
+
+    public function getModalId(): string
+    {
+        return $this->modalId;
     }
 
     public function getContainerElement(): ElementInterface
@@ -65,64 +71,61 @@ class BsModalBuilder
         return $this->footer;
     }
 
-    public function getBtnSecondaryElement(): ElementInterface
+    public function createTriggerButton(?string $label = null): BsModalButton
     {
-        return $this->btnSecondary;
-    }
+        $button = new BsModalButton($label ?? 'Open', BsModalButton::TYPE_BUTTON, [
+            'type' => "button",
+            'class' => "btn btn-primary",
+            'data-bs-toggle' => "modal",
+            'data-bs-target' => "#{$this->modalId}",
+        ]);
 
-    public function getBtnPrimaryElement(): ElementInterface
-    {
-        return $this->btnPrimary;
+        $button->getElement()->removeAttribute('data-bs-dismiss');
+
+        return $button;
     }
 
     protected function createElements(): void
     {
         $this->container =  new ElementNode(NodeNameEnum::NODE_DIV, [
-             'class' => 'modal',
-             'tabindex' => '-1',
-         ]);
+            'class' => 'modal fade',
+            'tabindex' => '-1',
+            'aria-hidden' => 'true',
+        ]);
+
+        $this->modalId = "pbs-modal-{$this->container->getNodeId()}";
+
+        $this->container->setAttribute('id', $this->modalId);
 
         $this->dialog =  new ElementNode(NodeNameEnum::NODE_DIV, [
-             'class' => 'modal-dialog',
-         ]);
+            'class' => 'modal-dialog',
+        ]);
 
         $this->content = new ElementNode(NodeNameEnum::NODE_DIV, [
-           'class' => 'modal-content'
+            'class' => 'modal-content'
         ]);
 
         $this->header = new ElementNode(NodeNameEnum::NODE_DIV, [
-           'class' => 'modal-header'
+            'class' => 'modal-header'
         ]);
 
         $this->title = new ElementNode(NodeNameEnum::NODE_H5, [
-           'class' => 'modal-title'
+            'class' => 'modal-title'
         ]);
 
         $this->btnClose = new ElementNode(NodeNameEnum::NODE_BUTTON, [
-           'class' => 'btn-close',
-           'type' => 'button',
-           'aria-label' => 'Close',
+            'class' => 'btn-close',
+            'type' => 'button',
+            'aria-label' => 'Close',
             'data-bs-dismiss' => 'modal',
         ]);
 
         $this->body = new ElementNode(NodeNameEnum::NODE_DIV, [
-           'class' => 'modal-body'
+            'class' => 'modal-body'
         ]);
 
         $this->footer = new ElementNode(NodeNameEnum::NODE_DIV, [
-           'class' => 'modal-footer'
-        ]);
-
-        $this->btnSecondary = new ElementNode(NodeNameEnum::NODE_BUTTON, [
-           'class' => 'btn btn-secondary',
-           'type' => 'button',
-           'data-bs-dismiss' => 'modal',
-
-        ]);
-
-        $this->btnPrimary = new ElementNode(NodeNameEnum::NODE_BUTTON, [
-           'class' => 'btn btn-primary',
-           'type' => 'button'
+            'class' => 'modal-footer'
         ]);
     }
 
@@ -135,7 +138,5 @@ class BsModalBuilder
         $this->header->appendChild($this->btnClose);
         $this->content->appendChild($this->body);
         $this->content->appendChild($this->footer);
-        $this->footer->appendChild($this->btnSecondary);
-        $this->footer->appendChild($this->btnPrimary);
     }
 }

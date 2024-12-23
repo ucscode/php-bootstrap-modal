@@ -54,15 +54,23 @@ class BsModalTest extends TestCase
         $this->assertSame($button, $modal->getButton(0));
         $this->assertNull($modal->getButton(3));
         $this->assertSame('Ok', $newButton->getLabel());
-        $this->assertInstanceOf(ElementNode::class, $modal->getElement());
-        $this->assertSame('modal', $modal->getElement()->getAttribute('class'));
+        $this->assertInstanceOf(ElementNode::class, $modal->getModalElement());
+        $this->assertSame('modal fade', $modal->getModalElement()->getAttribute('class'));
 
         /**
          * @var HtmlCollection $children
          */
-        $children = $modal->getElement()->getChildren();
+        $children = $modal->getModalElement()->getChildren();
 
-        $this->assertSame('modal-dialog', $children->first()->getAttribute('class'));
-        $this->assertSame('modal-body', $modal->getElement()->querySelector('.modal-body')?->getAttribute('class'));
+        $this->assertSame('modal-dialog modal-fullscreen', $children->first()->getAttribute('class'));
+        $this->assertSame('modal-body', $modal->getModalElement()->querySelector('.modal-body')?->getAttribute('class'));
+
+        $modal->setSize(BsModal::SIZE_LG);
+        $this->assertSame(BsModal::SIZE_LG, $modal->getSize());
+        $this->assertSame('modal-dialog modal-lg', $modal->getModalElement()->getChildren()->first()->getAttribute('class'));
+
+        $modal->setSize(BsModal::SIZE_XL);
+        $this->assertSame(BsModal::SIZE_XL, $modal->getSize());
+        $this->assertSame('modal-dialog modal-xl', $modal->getModalElement()->getChildren()->first()->getAttribute('class'));
     }
 }

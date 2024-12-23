@@ -2,39 +2,52 @@
 
 namespace Ucscode\HtmlComponent\BsModal;
 
-use Ucscode\UssElement\Enums\NodeNameEnum;
 use Ucscode\UssElement\Node\ElementNode;
+use Ucscode\UssElement\Node\TextNode;
 
-class BsModalButton
+class BsModalButton implements \Stringable
 {
     public const TYPE_ANCHOR = 'A';
     public const TYPE_BUTTON = 'BUTTON';
 
-    protected ?string $label = null;
-    protected ?string $type = null;
-    protected ?ElementNode $element = null;
+    protected ElementNode $element;
 
     public function __construct(string $label = 'Ok', string $type = self::TYPE_BUTTON, array $attributes = [])
     {
-        $this->label = $label;
-        $this->type = $this->validateBtnType($type);
-        $this->element = new ElementNode($this->type, $attributes);
+        $attributes += [
+            'class' => 'btn btn-primary',
+            'type' => 'button',
+            'data-bs-dismiss' => 'modal',
+            'aria-label' => $label,
+        ];
+
+        $this->element = new ElementNode($this->validateBtnType($type), $attributes);
+        $this->setLabel($label);
+    }
+
+    public function __toString(): string
+    {
+        return $this->element->render(true);
     }
 
     public function getLabel(): ?string
     {
-        return $this->label;
+        return $this->element->getInnerHtml();
     }
 
     public function setLabel(?string $label): static
     {
-        $this->label = $label;
+        $this->element
+            ->clearChildNodes()
+            ->appendChild(new TextNode($label ?? ''))
+        ;
+
         return $this;
     }
 
     public function getType(): ?string
     {
-        return $this->type;
+        return $this->element->getNodeName();
     }
 
     public function getElement(): ElementNode
@@ -42,18 +55,8 @@ class BsModalButton
         return $this->element;
     }
 
-    public function setElement(ElementNode $element): static
-    {
-        $this->element = $element;
-        return $this;
-    }
-
     private function validateBtnType(string $type): string
     {
-        if (in_array($type, [self::TYPE_ANCHOR, self::TYPE_BUTTON])) {
-            return $type;
-        }
-
-        return self::TYPE_BUTTON;
+        return in_array(strtoupper($type), [self::TYPE_ANCHOR, self::TYPE_BUTTON]) ? $type : self::TYPE_BUTTON;
     }
 }
