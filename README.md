@@ -165,8 +165,10 @@ Add the buttons to the modal
 
 ```php
 $modal
-    ->addButton($defaultButton)
-    ->addButton($customizedButton)
+    ->addButton($button)
+    ->addButton($configuredButton)
+    ->removeButton(0) // remove button at index 0
+    ->removeButton($button) // remove the button instance
 ;
 ```
 
@@ -199,7 +201,7 @@ To access the modal element itself, you can get the `container` element from the
 $modal->getBuilder()->getContainerElement();
 ```
 
-`BsModal::getElement()` is also provides to easily access to the modal container
+`BsModal::getElement()` method also provides an easy access to the modal container
 
 ```php
 $modal->getElement();
