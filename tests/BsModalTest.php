@@ -13,9 +13,9 @@ class BsModalTest extends TestCase
 {
     public function testBsModalButtonInstance(): BsModalButton
     {
-        $button = new BsModalButton('Click Me', BsModalButton::TYPE_ANCHOR, [
+        $button = new BsModalButton('Click Me', [
             'class' => 'btn btn-secondary',
-        ]);
+        ], BsModalButton::TYPE_ANCHOR);
 
         $this->assertSame('Click Me', $button->getLabel());
         $this->assertSame('A', BsModalButton::TYPE_ANCHOR);

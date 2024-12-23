@@ -12,17 +12,26 @@ class BsModalButton implements \Stringable
 
     protected ElementNode $element;
 
-    public function __construct(string $label = 'Ok', string $type = self::TYPE_BUTTON, array $attributes = [])
+    public function __construct(string $label = 'Ok', array $attributes = [], string $type = self::TYPE_BUTTON)
     {
+        if (array_key_exists(':target', $attributes)) {
+            $target = $attributes[':target'];
+            unset($attributes[':target']);
+        }
+
         $attributes += [
             'class' => 'btn btn-primary',
             'type' => 'button',
-            'data-bs-dismiss' => 'modal',
             'aria-label' => $label,
+            'data-bs-dismiss' => 'modal'
         ];
 
         $this->element = new ElementNode($this->validateBtnType($type), $attributes);
         $this->setLabel($label);
+
+        if ($target ?? null) {
+            $this->setTarget($target);
+        }
     }
 
     public function __toString(): string
@@ -58,6 +67,59 @@ class BsModalButton implements \Stringable
     public function getElement(): ElementNode
     {
         return $this->element;
+    }
+
+    public function setTarget(BsModal|string $target): static
+    {
+        if ($target instanceof BsModal) {
+            $target = $target->getModalId();
+        }
+
+        if (empty(trim($target))) {
+            $this->removeTarget();
+            return $this;
+        }
+
+        if (strpos($target, '#') !== 0) {
+            $target = "#{$target}";
+        }
+
+        $this->element
+            ->setAttribute('data-bs-target', $target)
+            ->setAttribute('data-bs-toggle', 'modal')
+            ->removeAttribute('data-bs-dismiss')
+        ;
+
+        return $this;
+    }
+
+    public function getTarget(): ?string
+    {
+        if (!$this->hasTarget()) {
+            return null;
+        }
+
+        return substr($this->element->getAttribute('data-bs-target'), 1);
+    }
+
+    public function hasTarget(): bool
+    {
+        return
+            $this->element->hasAttribute('data-bs-target') &&
+            $this->element->hasAttribute('data-bs-toggle') &&
+            !$this->element->hasAttribute('data-bs-dismiss')
+        ;
+    }
+
+    public function removeTarget(): static
+    {
+        $this->element
+            ->removeAttribute('data-bs-target')
+            ->removeAttribute('data-bs-toggle')
+            ->setAttribute('data-bs-dismiss', 'modal')
+        ;
+
+        return $this;
     }
 
     private function validateBtnType(string $type): string

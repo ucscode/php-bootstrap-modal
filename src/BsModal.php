@@ -24,14 +24,16 @@ class BsModal implements \Stringable
      */
     protected array $buttons = [];
 
-    public function __construct(?array $configs = [], bool $dialog = false)
+    public function __construct(?array $configs = [], bool $addOkButton = true)
     {
         $this->builder = new BsModalBuilder();
         $this->resolveConfiguration($configs ?? []);
 
-        if (empty($this->buttons) && !$dialog) {
+        if (empty($this->buttons) && $addOkButton) {
             $this->addButton(new BsModalButton());
         }
+
+        $this->analyseFooterVisibililty();
     }
 
     public function __toString(): string
@@ -321,6 +323,17 @@ class BsModal implements \Stringable
                         //
                     }
                 }
+            }
+        }
+
+        if (count($this->buttons) > 1 && null === ($configs['backdropStatic'] ?? null)) {
+            $this->setBackdropStatic(true);
+        }
+
+        foreach ($this->buttons as $button) {
+            if ($button->hasTarget()) {
+                $this->setBackdropStatic(true);
+                break;
             }
         }
     }

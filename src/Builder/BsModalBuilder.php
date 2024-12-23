@@ -72,7 +72,7 @@ class BsModalBuilder
 
     public function createTriggerButton(?string $label = null): BsModalButton
     {
-        $button = new BsModalButton($label ?? 'Open', BsModalButton::TYPE_BUTTON, [
+        $button = new BsModalButton($label ?? 'Open', [
             'type' => "button",
             'class' => "btn btn-primary",
             'data-bs-toggle' => "modal",
