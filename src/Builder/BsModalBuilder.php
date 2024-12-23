@@ -6,7 +6,6 @@ use Ucscode\HtmlComponent\BsModal\BsModalButton;
 use Ucscode\UssElement\Contracts\ElementInterface;
 use Ucscode\UssElement\Node\ElementNode;
 use Ucscode\UssElement\Enums\NodeNameEnum;
-use Ucscode\UssElement\Node\TextNode;
 
 class BsModalBuilder
 {

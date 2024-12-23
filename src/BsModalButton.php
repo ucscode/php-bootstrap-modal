@@ -27,7 +27,12 @@ class BsModalButton implements \Stringable
 
     public function __toString(): string
     {
-        return $this->element->render(true);
+        return $this->render();
+    }
+
+    public function render(bool $indent = true): string
+    {
+        return $this->element->render($indent);
     }
 
     public function getLabel(): ?string

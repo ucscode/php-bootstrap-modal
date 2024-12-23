@@ -37,7 +37,12 @@ class BsModal implements \Stringable
 
     public function __toString(): string
     {
-        return $this->builder->getContainerElement()->render(true);
+        return $this->render();
+    }
+
+    public function render(bool $indent = true): string
+    {
+        return $this->builder->getContainerElement()->render($indent);
     }
 
     public function getBuilder(): BsModalBuilder
@@ -50,7 +55,7 @@ class BsModal implements \Stringable
         return $this->builder->getModalId();
     }
 
-    public function getModalElement(): ElementNode
+    public function getElement(): ElementNode
     {
         return $this->builder->getContainerElement();
     }
