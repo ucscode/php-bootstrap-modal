@@ -2,7 +2,6 @@
 
 namespace Ucscode\HtmlComponent\BsModal;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Ucscode\HtmlComponent\BsModal\Builder\BsModalBuilder;
 use Ucscode\UssElement\Contracts\ElementInterface;
 use Ucscode\UssElement\Node\ElementNode;
@@ -68,6 +67,22 @@ class BsModal implements \Stringable
     public function setTitle(?string $title): static
     {
         $this->setElementContent($this->builder->getTitleElement(), $title);
+
+        $this->analyseHeaderVisibility();
+
+        return $this;
+    }
+
+    public function hasCloseButton(): bool
+    {
+        return $this->builder->getBtnCloseElement()->isVisible();
+    }
+
+    public function setCloseButton(bool $visible): static
+    {
+        $this->builder->getBtnCloseElement()->setVisible($visible);
+
+        $this->analyseHeaderVisibility();
 
         return $this;
     }
@@ -166,18 +181,6 @@ class BsModal implements \Stringable
     public function setShow(bool $show): static
     {
         $this->show = $show;
-
-        return $this;
-    }
-
-    public function hasCloseButton(): bool
-    {
-        return $this->builder->getBtnCloseElement()->isVisible();
-    }
-
-    public function setCloseButton(bool $visible): static
-    {
-        $this->builder->getBtnCloseElement()->setVisible($visible);
 
         return $this;
     }
@@ -293,6 +296,8 @@ class BsModal implements \Stringable
             }
         }
 
+        $this->analyseFooterVisibililty();
+
         return $this;
     }
 
@@ -331,5 +336,19 @@ class BsModal implements \Stringable
         ;
 
         return $element;
+    }
+
+    private function analyseHeaderVisibility(): void
+    {
+        $visible = !empty($this->getTitle()) || $this->hasCloseButton();
+
+        $this->builder->getHeaderElement()->setVisible($visible);
+    }
+
+    private function analyseFooterVisibililty(): void
+    {
+        $visible = !empty($this->buttons);
+
+        $this->builder->getFooterElement()->setVisible($visible);
     }
 }
