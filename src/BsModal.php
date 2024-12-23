@@ -304,11 +304,18 @@ class BsModal implements \Stringable
     private function resolveConfiguration(array $configs): void
     {
         $restrainedProperties = ['element', 'associateButton'];
-        $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($configs as $key => $value) {
             if (!in_array($key, $restrainedProperties)) {
-                $propertyAccessor->setValue($this, $key, $value);
+                $method = sprintf('set%s', ucfirst($key));
+
+                if (method_exists($this, $method)) {
+                    try {
+                        $this->{$method}($value);
+                    } catch (\Exception $e) {
+                        //
+                    }
+                }
             }
         }
     }
