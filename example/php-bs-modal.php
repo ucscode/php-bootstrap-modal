@@ -37,7 +37,7 @@ $noHeader = new BsModal([
 
 $notOkModal = new BsModal([
     'message' => 'With no footer button, the footer becomes insignficant',
-    'footerCloseButton' => false,
+    'okButton' => false,
 ]);
 
 // ========== [ Sized modals ] ==========

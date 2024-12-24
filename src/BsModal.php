@@ -43,7 +43,7 @@ class BsModal implements \Stringable
         $this->builder = new BsModalBuilder();
         $this->resolveConfiguration($configs ?? []);
 
-        if (empty($this->buttons) && !empty($configs['footerCloseButton'] ?? true)) {
+        if (empty($this->buttons) && !empty($configs['okButton'] ?? true)) {
             $this->addButton(new BsModalButton());
         }
 
