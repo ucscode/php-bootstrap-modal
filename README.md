@@ -105,6 +105,14 @@ That's it. Seriously!
       <td><code>createTriggerButton</code></td>
       <td>Generate a new button that will be used to trigger (open) the modal box</td>
     </tr>
+    <tr>
+      <td><code>setShow</code></td>
+      <td>Display the modal automatically when the page is loaded</td>
+    </tr>
+    <tr>
+      <td><code>addEventListener</code></td>
+      <td>Add Javascript event listener to the modal element. See modal events <a href='https://getbootstrap.com/docs/5.3/components/modal/#events' target='_blank'>Here...</a></td>
+    </tr>
   </tbody>
 </table>
 
@@ -280,6 +288,43 @@ The library generates valid HTML for a Bootstrap modal. You can insert the outpu
   </div>
 </div>
 ```
+
+### Auto Display
+
+By default, the bootstrap modal will be hidden unless triggered by a button.\
+To automatically display the modal on page load, use the `show` option
+
+```php
+$modal = new BsModal([
+  'message' => 'This will display on page load',
+  'show' => true,
+])
+```
+
+After that, render it on the page using the `$modal->render()` method
+
+### Trigger Events
+
+To trigger events on the modal, you can pass options prefixed with `event:`
+
+```php
+$modal = new BsModal([
+  'message' => "This will trigger multiple events",
+  'event:show.bs.modal' => 'showFunc',
+  'event:hidden.bs.modal' => 'hiddenFunc',
+]);
+```
+
+The `showFunc` and `hiddenFunc` are functions that should have been defined in the javascript environment.\
+The process generates javascript event listener syntax similar to the ones below
+
+```js
+element.addEventListener('show.bs.modal', showFunc);
+element.addEventListener('hidden.bs.modal', hiddenFunc);
+```
+
+If the event values are not valid function names, the event will not be added
+
 ## License
 
 This library is open-source software licensed under the [MIT license](LICENSE).

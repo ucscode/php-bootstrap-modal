@@ -24,7 +24,6 @@ class BsModal implements \Stringable
     protected BsModalBuilder $builder;
     protected string $size = self::SIZE_MD;
     protected bool $show = false;
-    protected ?string $callback = null;
 
     /**
      * @var BsModalButton[]
@@ -190,17 +189,6 @@ class BsModal implements \Stringable
         return $this;
     }
 
-    public function getCallback(): ?string
-    {
-        return $this->callback;
-    }
-
-    public function setCallback(?string $callback): static
-    {
-        $this->callback = $callback;
-        return $this;
-    }
-
     public function getShow(): bool
     {
         return $this->show;
@@ -344,7 +332,9 @@ class BsModal implements \Stringable
      */
     public function addEventListener(string $eventName, string $funcName): static
     {
-        $this->modalJs['events'][$eventName] = $funcName;
+        if (preg_match('/^[a-z_]\w*$/i', htmlentities($funcName))) {
+            $this->modalJs['events'][$eventName] = htmlentities($funcName);
+        }
 
         return $this;
     }
