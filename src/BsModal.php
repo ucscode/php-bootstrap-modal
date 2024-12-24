@@ -3,12 +3,13 @@
 namespace Ucscode\HtmlComponent\BsModal;
 
 use Ucscode\HtmlComponent\BsModal\Builder\BsModalBuilder;
+use Ucscode\HtmlComponent\BsModal\Contracts\BsModalInterface;
 use Ucscode\UssElement\Contracts\ElementInterface;
 use Ucscode\UssElement\Enums\NodeNameEnum;
 use Ucscode\UssElement\Node\ElementNode;
 use Ucscode\UssElement\Node\TextNode;
 
-class BsModal implements \Stringable
+class BsModal implements BsModalInterface
 {
     public const SIZE_SM = 'sm';
     public const SIZE_MD = '';
@@ -54,6 +55,23 @@ class BsModal implements \Stringable
     public function __toString(): string
     {
         return $this->render();
+    }
+
+    /**
+     * Create BsModal From json string
+     *
+     * @param string $json
+     * @return BsModal
+     * @throws Exception If json is not properly formatted or not a derivation of BsModal
+     */
+    public static function createFromJson(string $json): BsModal
+    {
+        return new self();
+    }
+
+    public function toJson(): string
+    {
+        return '';
     }
 
     public function render(bool $indent = true): string
@@ -189,7 +207,7 @@ class BsModal implements \Stringable
         return $this;
     }
 
-    public function getShow(): bool
+    public function isShown(): bool
     {
         return $this->show;
     }
@@ -218,7 +236,7 @@ class BsModal implements \Stringable
         return $this;
     }
 
-    public function getVerticalCenter(): bool
+    public function isVerticalCenter(): bool
     {
         return $this->builder->getDialogElement()
             ->getClassList()
