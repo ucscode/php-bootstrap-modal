@@ -5,14 +5,20 @@ use Ucscode\HtmlComponent\BsModal\BsModalButton;
 
 require_once '../vendor/autoload.php';
 
+// ========== [ Basic modal ] ==========
+
 $simpleModal = new BsModal([
     'message' => 'Hi, I am a simple bootstrap modal',
 ]);
+
+// ========== [ Titled modal ] ==========
 
 $titledModal = new BsModal([
     'title' => 'Howdy!',
     'message' => 'I can really generate bootstrap modal HTML easily'
 ]);
+
+// ========== [ No close button modal ] ==========
 
 $noCloseBtnModal = new BsModal([
     'title' => 'Outch!',
@@ -20,14 +26,21 @@ $noCloseBtnModal = new BsModal([
     'message' => 'There is no close button at the top right',
 ]);
 
+// ========== [ No header modal ] ==========
+
 $noHeader = new BsModal([
     'closeButton' => false,
     'message' => 'With no header title and no close button, the header becomes insignificant.',
 ]);
 
+// ========== [ No default footer button modal ] ==========
+
 $notOkModal = new BsModal([
     'message' => 'With no footer button, the footer becomes insignficant',
-], false);
+    'footerCloseButton' => false,
+]);
+
+// ========== [ Sized modals ] ==========
 
 $sizedModals = [
     'sm' => new BsModal([
@@ -53,10 +66,14 @@ $sizedModals = [
     ]),
 ];
 
+// ========== [ Vertically centered modal ] ==========
+
 $verticalModal = new BsModal([
     'message' => 'This modal is centered at the middle of the page',
     'verticalCenter' => true,
 ]);
+
+// ========== [ Scrollable modal ] ==========
 
 $scrollableModal = new BsModal([
     'title' => 'A long scrollable Lorem Ipsum  content',
@@ -72,15 +89,21 @@ $scrollableModal = new BsModal([
         LOREM_IPSUM,
 ]);
 
+// ========== [ Backdrop static modal ] ==========
+
 $staticModal = new BsModal([
     'message' => 'This modal will not close when you click the background',
     'backdropStatic' => true,
 ]);
 
+// ========== [ Esc key not allowed modal ] ==========
+
 $noEscapeModal = new BsModal([
     'message' => 'This modal will not close when you click the <strong>esc</strong> button on your keyboard',
     'closeOnEscape' => false,
 ]);
+
+// ========== [ Custom buttons modal ] ==========
 
 $customButtonModal = new BsModal([
     'message' => 'This is a modal with custom buttons',
@@ -91,8 +114,6 @@ $customButtonModal = new BsModal([
         new BsModalButton('Continue'),
     ]
 ]);
-
-# ===========================================
 
 $designedModal = new BsModal([
     'message' => "This is a custom modal designed as shown in <a href='https://getbootstrap.com/docs/5.3/examples/modals/#modalChoice' target='_blank'>this example</a>",
@@ -119,7 +140,7 @@ $designedModal->getBuilder()
     ->getFooterElement()
         ->getClassList()->add('flex-nowrap p-0');
 
-# ============================================
+// ========== [ Progressive modals ] ==========
 
 $exchangeModal1 = new BsModal([
     'message' => "You've done a really great job coming this far!",
@@ -130,6 +151,31 @@ $exchangeModal2 = new BsModal([
     'buttons' => [
         new BsModalButton('Ok', [
             ':target' => $exchangeModal1,
+        ]),
+    ],
+]);
+
+// ========== [ Auto rendered modal ] ==========
+
+$autoRenderedModal = new BsModal([
+    'title' => "Welcome to PHP BS Modal",
+    'message' => 'Thank you for choosing PHP Bootstrap Modal. This library has done the heavy lifting of rendering bootstrap modal box on your site. This comes in handy after a redirect or flash (session) message. Checkout the processes below',
+    'show' => true,
+]);
+
+// ========== [ Event triggering modal ] ==========
+
+$eventTriggeredModal = new BsModal([
+    'title' => 'Trigger Event',
+    'message' => 'When this modal is hidden, you will be informed about which button you clicked',
+    'event:hidden.bs.modal' => 'detectUserClick',
+    'buttons' => [
+        new BsModalButton('Cancel', [
+            'class' => 'btn btn-danger',
+            'onclick' => 'window.pbsm_btn = this',
+        ]),
+        new BsModalButton('Ok', [
+            'onclick' => 'window.pbsm_btn = this',
         ])
-    ]
+    ],
 ]);

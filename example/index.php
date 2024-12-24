@@ -109,8 +109,31 @@
                         <?php echo $exchangeModal2->render(); ?>
                     </div>
                 </div>
+                <div class="text-center card mb-3">
+                    <div class="card-body">
+                        <h6 class="mb-3">This was the first modal that was automatically rendered</h6>
+                        <?php echo $autoRenderedModal->createTriggerButton('Check it out'); ?>
+                        <?php echo $autoRenderedModal->render(); ?>
+                    </div>
+                </div>
+                <div class="text-center card mb-3">
+                    <div class="card-body">
+                        <h6 class="">This modal will trigger a <code>hidden.bs.modal</code> event</h6>
+                        <p class="mb-3">When the modal is hidden, it executes the <code>detectUserClick()</code> function</p>
+                        <?php echo $eventTriggeredModal->createTriggerButton('Try it'); ?>
+                        <?php echo $eventTriggeredModal->render(); ?>
+                    </div>
+                </div>
             </main>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+        <script>
+            function detectUserClick(event) {
+                const btn = window.pbsm_btn;
+                let context = !btn ? 'Close' : btn.innerText.trim();
+                window.pbsm_btn = undefined;
+                window.alert(`You clicked the "${context}" button`);
+            }
+        </script>
     </body>
 </html>

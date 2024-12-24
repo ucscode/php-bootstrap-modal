@@ -4,6 +4,7 @@ namespace Ucscode\HtmlComponent\BsModal;
 
 use Ucscode\HtmlComponent\BsModal\Builder\BsModalBuilder;
 use Ucscode\UssElement\Contracts\ElementInterface;
+use Ucscode\UssElement\Enums\NodeNameEnum;
 use Ucscode\UssElement\Node\ElementNode;
 use Ucscode\UssElement\Node\TextNode;
 
@@ -14,26 +15,41 @@ class BsModal implements \Stringable
     public const SIZE_LG = 'lg';
     public const SIZE_XL = 'xl';
     public const SIZE_FULLSCREEN = 'fullscreen';
+    public const EVENT_HIDE = 'hide.bs.modal';
+    public const EVENT_HIDDEN = 'hidden.bs.modal';
+    public const EVENT_HIDE_PREVENTED = 'hidePrevented.bs.modal';
+    public const EVENT_SHOW = 'show.bs.modal';
+    public const EVENT_SHOWN = 'shown.bs.modal';
 
     protected BsModalBuilder $builder;
     protected string $size = self::SIZE_MD;
-    protected bool $show = true;
+    protected bool $show = false;
     protected ?string $callback = null;
+
     /**
      * @var BsModalButton[]
      */
     protected array $buttons = [];
 
-    public function __construct(?array $configs = [], bool $addOkButton = true)
+    /**
+     * Js store for modal events
+     *
+     * @var array
+     */
+    private array $modalJs = ['events' => []];
+
+    public function __construct(?array $configs = [])
     {
         $this->builder = new BsModalBuilder();
         $this->resolveConfiguration($configs ?? []);
 
-        if (empty($this->buttons) && $addOkButton) {
+        if (empty($this->buttons) && !empty($configs['footerCloseButton'] ?? true)) {
             $this->addButton(new BsModalButton());
         }
 
         $this->analyseFooterVisibililty();
+
+        $this->modalJs['context'] = sprintf("const modal = new bootstrap.Modal('#%s')", $this->builder->getModalId());
     }
 
     public function __toString(): string
@@ -43,7 +59,17 @@ class BsModal implements \Stringable
 
     public function render(bool $indent = true): string
     {
-        return $this->builder->getContainerElement()->render($indent);
+        $element = $this->builder->getContainerElement();
+        $content = $element->render(0);
+        $scriptText = new TextNode($this->buildJsActions());
+
+        if (!$scriptText->isContentWhiteSpace()) {
+            $scriptNode = (new ElementNode(NodeNameEnum::NODE_SCRIPT))->appendChild($scriptText);
+            $content = $element->appendChild($scriptNode)->render(0);
+            $element->removeChild($scriptNode);
+        }
+
+        return $content;
     }
 
     public function getBuilder(): BsModalBuilder
@@ -308,19 +334,78 @@ class BsModal implements \Stringable
         return $this->builder->createTriggerButton($label);
     }
 
+    /**
+     * Add an event listener to the modal
+     *
+     * @param string $eventName The name of the event (e.g "shown.bs.modal").
+     * @param string $funcName  The name of the javascript function.
+     *                              If the function is not defined in javascript, an error will be thrown in browser
+     * @return static
+     */
+    public function addEventListener(string $eventName, string $funcName): static
+    {
+        $this->modalJs['events'][$eventName] = $funcName;
+
+        return $this;
+    }
+
+    /**
+     * Remove a previously added event listener from the modal
+     *
+     * @param string $eventName
+     * @return static
+     */
+    public function removeEventListener(string $eventName): static
+    {
+        if ($this->hasEventListener($eventName)) {
+            unset($this->modalJs['events'][$eventName]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check if an event listener exists
+     *
+     * @param string $eventName
+     * @return boolean
+     */
+    public function hasEventListener(string $eventName): bool
+    {
+        return array_key_exists($eventName, $this->modalJs['events'], true);
+    }
+
+    /**
+     * Get the callback name of the event
+     *
+     * @param string $eventName
+     * @return string|null
+     */
+    public function getEventListener(string $eventName): ?string
+    {
+        return $this->modalJs['events'][$eventName] ?? null;
+    }
+
     private function resolveConfiguration(array $configs): void
     {
         $restrainedProperties = ['element', 'associateButton'];
 
         foreach ($configs as $key => $value) {
             if (!in_array($key, $restrainedProperties)) {
+
+                // (example) event:shown.bs.modal
+                if (preg_match('/^event:/i', $key)) {
+                    $event = explode(':', $key, 2)[1];
+                    $this->addEventListener($event, $value);
+                    continue;
+                }
+
                 $method = sprintf('set%s', ucfirst($key));
 
                 if (method_exists($this, $method)) {
                     try {
                         $this->{$method}($value);
                     } catch (\Exception $e) {
-                        //
                     }
                 }
             }
@@ -363,5 +448,27 @@ class BsModal implements \Stringable
         $visible = !empty($this->buttons);
 
         $this->builder->getFooterElement()->setVisible($visible);
+    }
+
+    private function buildJsActions(): string
+    {
+        $actions = [];
+
+        if ($this->show) {
+            $actions[] = 'modal.show()';
+        }
+
+        if (!empty($this->modalJs['events'])) {
+            foreach ($this->modalJs['events'] as $eventName => $funcName) {
+                $actions[] = sprintf("modal._element.addEventListener('%s', %s)", $eventName, $funcName);
+            }
+        }
+
+        if (!empty($actions)) {
+            array_unshift($actions, $this->modalJs['context']);
+            return sprintf("document.addEventListener('DOMContentLoaded',()=>{%s;})", implode(';', $actions));
+        }
+
+        return '';
     }
 }
