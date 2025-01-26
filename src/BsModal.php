@@ -48,7 +48,6 @@ class BsModal implements BsModalInterface
         }
 
         $this->analyseFooterVisibililty();
-
         $this->modalJs['context'] = sprintf("const modal = new bootstrap.Modal('#%s')", $this->builder->getModalId());
     }
 
@@ -81,8 +80,10 @@ class BsModal implements BsModalInterface
         $scriptText = new TextNode($this->buildJsActions());
 
         if (!$scriptText->isContentWhiteSpace()) {
-            $scriptNode = (new ElementNode(NodeNameEnum::NODE_SCRIPT))->appendChild($scriptText);
-            $content = $element->appendChild($scriptNode)->render(0);
+            $scriptNode = new ElementNode(NodeNameEnum::NODE_SCRIPT);
+            $scriptNode->appendChild($scriptText);
+            $element->appendChild($scriptNode);
+            $content = $element->render(0);
             $element->removeChild($scriptNode);
         }
 
@@ -435,11 +436,9 @@ class BsModal implements BsModalInterface
     {
         $textNode = new TextNode($value ?? '');
 
-        $element
-            ->clearChildNodes()
-            ->prependChild($textNode)
-            ->setVisible(!$textNode->isContentWhiteSpace())
-        ;
+        $element->clearChildNodes();
+        $element->prependChild($textNode);
+        $element->setVisible(!$textNode->isContentWhiteSpace());
 
         return $element;
     }

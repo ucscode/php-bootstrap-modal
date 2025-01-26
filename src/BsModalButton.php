@@ -51,10 +51,8 @@ class BsModalButton implements \Stringable
 
     public function setLabel(?string $label): static
     {
-        $this->element
-            ->clearChildNodes()
-            ->appendChild(new TextNode($label ?? ''))
-        ;
+        $this->element->clearChildNodes();
+        $this->element->appendChild(new TextNode($label ?? ''));
 
         return $this;
     }
