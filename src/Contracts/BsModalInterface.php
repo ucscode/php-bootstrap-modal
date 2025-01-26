@@ -8,8 +8,6 @@ use Ucscode\UssElement\Node\ElementNode;
 
 interface BsModalInterface extends \Stringable
 {
-    public static function createFromJson(string $json): BsModalInterface;
-    public function toJson(): string;
     public function render(bool $indent): string;
     public function getBuilder(): BsModalBuilder;
     public function getModalId(): string;
@@ -31,4 +29,6 @@ interface BsModalInterface extends \Stringable
     public function removeEventListener(string $eventName): static;
     public function hasEventListener(string $eventName): bool;
     public function getEventListener(string $eventName): ?string;
+    // public static function createFromJson(string $json): BsModalInterface;
+    // public function toJson(): string;
 }

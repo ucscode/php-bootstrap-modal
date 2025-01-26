@@ -38,7 +38,7 @@ class BsModal implements BsModalInterface
      */
     private array $modalJs = ['events' => []];
 
-    public function __construct(?array $configs = [])
+    public function __construct(?array $configs = null)
     {
         $this->builder = new BsModalBuilder();
         $this->resolveConfiguration($configs ?? []);
@@ -54,23 +54,6 @@ class BsModal implements BsModalInterface
     public function __toString(): string
     {
         return $this->render();
-    }
-
-    /**
-     * Create BsModal From json string
-     *
-     * @param string $json
-     * @return BsModal
-     * @throws Exception If json is not properly formatted or not a derivation of BsModal
-     */
-    public static function createFromJson(string $json): BsModal
-    {
-        return new self();
-    }
-
-    public function toJson(): string
-    {
-        return '';
     }
 
     public function render(bool $indent = true): string
