@@ -38,12 +38,17 @@ class BsModal implements BsModalInterface
      */
     private array $modalJs = ['events' => []];
 
-    public function __construct(?array $configs = null)
+    public function __construct(null|string|array $context = null)
     {
         $this->builder = new BsModalBuilder();
-        $this->resolveConfiguration($configs ?? []);
 
-        if (empty($this->buttons) && !empty($configs['okButton'] ?? true)) {
+        if (is_string($context)) {
+            $context = ['message' => $context];
+        }
+        
+        $this->resolveConfiguration($context ?? []);
+
+        if (empty($this->buttons) && !empty($context['okButton'] ?? true)) {
             $this->addButton(new BsModalButton());
         }
 
