@@ -79,7 +79,7 @@ echo $modal->render();
     </tr>
     <tr>
       <td><code>getElement</code></td>
-      <td>Return the main modal element</td>
+      <td>Return the main modal <a href='https://github.com/ucscode/uss-element'>element</a></td>
     </tr>
     <tr>
       <td><code>setTitle</code></td>
@@ -122,6 +122,10 @@ echo $modal->render();
       <td>Display the modal automatically when the page is loaded</td>
     </tr>
     <tr>
+      <td><code>setMessage</code></td>
+      <td>Define the message that will be displayed in the modal box</td>
+    </tr>
+    <tr>
       <td><code>addEventListener</code></td>
       <td>Add Javascript event listener to the modal element. See modal events <a href='https://getbootstrap.com/docs/5.3/components/modal/#events' target='_blank'>Here...</a></td>
     </tr>
@@ -161,27 +165,29 @@ $modal->setMessage('<p>This is dynamically generated content.</p>');
 
 By default:
 
-- If `true` is not passed to the second parameter of `BsModal`, 
-- If no custom button was added during the `new BsModal` instantiation,
+- If `okButton` (bool) is not defined, 
+- and If no custom button was added during the `new BsModal` instantiation,
 
 An `Ok` button will be automatically added to the modal.
 
-You can remove or add more custom buttons
+You can remove or add more custom buttons after initialization
+
+### Working with buttons
 
 ```php
 $button = new BsModalButton();
 ```
 
-Configure a button attributes
+Configure a button with label and attributes
 
 ```php
-$configuredButton = new BsModalButton('Save Changes', BsModalButton::TYPE_ANCHOR, [
+$configuredButton = new BsModalButton('Save Changes', [
     'class' => 'btn btn-success',
-    'onclick' => 'my_function',
+    'data-bs-toggle' => 'modal',
 ]);
 ```
 
-Add the buttons to the modal
+Adding buttons to the modal
 
 ```php
 $modal
@@ -196,8 +202,10 @@ $modal
 
 You can get the HTML string of the modal by calling the `render()` method
 
+> Optional: You can pass a positive integer argument to return an indented HTML
+
 ```php
-echo $modal->render();
+echo $modal->render(1);
 ```
 
 Since the modal (and buttons) implements `Stringable`, you can render them directly
