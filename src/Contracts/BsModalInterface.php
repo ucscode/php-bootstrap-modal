@@ -8,7 +8,7 @@ use Ucscode\UssElement\Node\ElementNode;
 
 interface BsModalInterface extends \Stringable
 {
-    public function render(bool $indent): string;
+    public function render(?int $indent): string;
     public function getBuilder(): BsModalBuilder;
     public function getModalId(): string;
     public function getElement(): ElementNode;

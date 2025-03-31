@@ -45,7 +45,7 @@ class BsModal implements BsModalInterface
         if (is_string($context)) {
             $context = ['message' => $context];
         }
-        
+
         $this->resolveConfiguration($context ?? []);
 
         if (empty($this->buttons) && !empty($context['okButton'] ?? true)) {
@@ -61,17 +61,17 @@ class BsModal implements BsModalInterface
         return $this->render();
     }
 
-    public function render(bool $indent = true): string
+    public function render(?int $indent = 0): string
     {
         $element = $this->builder->getContainerElement();
-        $content = $element->render(0);
+        $content = $element->render($indent);
         $scriptText = new TextNode($this->buildJsActions());
 
         if (!$scriptText->isContentWhiteSpace()) {
             $scriptNode = new ElementNode(NodeNameEnum::NODE_SCRIPT);
             $scriptNode->appendChild($scriptText);
             $element->appendChild($scriptNode);
-            $content = $element->render(0);
+            $content = $element->render($indent);
             $element->removeChild($scriptNode);
         }
 
