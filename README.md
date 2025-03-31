@@ -2,6 +2,8 @@
 
 A lightweight PHP library to generate dynamic Bootstrap modals effortlessly. Customize titles, content, buttons, and attributes programmatically, making it ideal for web applications with reusable and dynamic UI components.
 
+![Screenshot](./example/screenshot.png)
+
 ## Features
 - Dynamically create Bootstrap modals.
 - Customizable titles, body content, and footer buttons.
@@ -11,6 +13,16 @@ A lightweight PHP library to generate dynamic Bootstrap modals effortlessly. Cus
 ## Requirements
 - PHP 8.2 or higher.
 - Bootstrap 5 CSS and JavaScript files loaded in your project.
+
+## Examples
+
+To view a live sample, run a temporary PHP Server
+
+```
+php -S localhost:8000
+```
+
+Then open on your browser: `localhost:8000/example`
 
 ## Installation
 
