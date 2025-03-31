@@ -22,7 +22,7 @@ To view a live sample, run a temporary PHP Server
 php -S localhost:8000
 ```
 
-Then open on your browser: `localhost:8000/example`
+Then open on your browser: `localhost:8000/example`.  
 
 ## Installation
 
@@ -56,7 +56,7 @@ After that, all you need to do is render it.
 echo $modal->render();
 ```
 
-That's it. Seriously!
+> You can view `example/php-bs-modal.php` for more coding samples
 
 
 ### BsModal Methods
