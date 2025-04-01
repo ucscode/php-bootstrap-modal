@@ -29,6 +29,10 @@ class BsModalButton implements \Stringable
         $this->element = new ElementNode($this->validateBtnType($type), $attributes);
         $this->setLabel($label);
 
+        if (array_key_exists('href', $attributes) && $type === self::TYPE_ANCHOR) {
+            $this->element->removeAttribute('data-bs-dismiss');
+        }
+
         if ($target ?? null) {
             $this->setTarget($target);
         }
